@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using DataAccess;
 using DataAccess.Repository;
 using DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +13,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddIdentity<IdentityUser,  IdentityRole>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	options.LoginPath = $"/User/Login";
+	options.LogoutPath = $"/User/Logout";
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,8 +36,14 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.MapGet("url/{code}", async (string code,IUnitOfWork _unitOfWork) =>
+{
+	var url = await _unitOfWork.ShortenedUrlRepository.GetAsync(u => u.Code == code);
+	return Results.Redirect(url.LongUrl);
+});
+
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+	pattern: "{controller=Home}/{action=Index}");
 
 app.Run();

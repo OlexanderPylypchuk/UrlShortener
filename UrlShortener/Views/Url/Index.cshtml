@@ -1,0 +1,73 @@
+﻿@using System.Security.Claims
+@model ShortUrlVM
+
+@inject IHttpContextAccessor accessor
+
+@if (accessor.HttpContext.User.Identity.IsAuthenticated)
+{
+	<div class="p-3">
+		<form method="post">
+			<div class="mb-3 row p-1">
+				<label asp-for="UrlRequest.Url" class="p-0"></label>
+				<input asp-for="UrlRequest.Url" class="form-control" autocomplete="off" />
+				<span asp-validation-for="UrlRequest.Url" class="text-danger"></span>
+			</div>
+			<div class="col-6 col-md-3">
+				<button type="submit" class="btn btn-primary form-control">Create</button>
+			</div>
+		</form>
+	</div>
+}
+
+<div class="p-3">
+	<table class="table table-bordered table-striped ">
+		<thead>
+			<tr>
+				<th class="text-center">
+					Long Ulr
+				</th>
+				<th class="text-center">
+					Short Url
+				</th>
+				<th class="text-center">
+					Create Time
+				</th>
+				<th class="text-center">
+					Created by
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var obj in Model.ShortUrls)
+			{
+				<tr>
+					<td>
+						@obj.LongUrl
+					</td>
+					<td>
+						@obj.ShortUrl
+					</td>
+					<td>
+						@obj.CreatedDate
+					</td>
+					<td>
+						 @obj.ApplicationUser.Name
+					</td>
+					<td>
+						@if (accessor.HttpContext.User.Identity.IsAuthenticated && obj.UserId == accessor.HttpContext.User.Claims.Where(u => u.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value)
+						{
+							<div class="w-75 btn-group" role="group">
+
+								<a asp-controller="Url" asp-route-id="@obj.Code" asp-action="Delete" class="btn btn-danger mx-2">
+									<i class="bi bi-trash3"></i>Delete
+								</a>
+
+							</div>
+						}
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

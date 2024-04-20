@@ -1,0 +1,40 @@
+﻿@model RegisterVM
+
+<h1>Register</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 ">
+        <form method="post">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="UserName" class="form-control" autocomplete="off" aria-required="true" placeholder="name@example.com" />
+                <label asp-for="UserName">UserName</label>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Name" class="form-control" autocomplete="off" aria-required="true" placeholder="Name" />
+                <label asp-for="Name">Name</label>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Password" class="form-control" autocomplete="off" aria-required="true" placeholder="Password" />
+                <label asp-for="Password">Password</label>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="ConfirmPassword" class="form-control" autocomplete="off" aria-required="true" placeholder="Confirm Password" />
+                <label asp-for="ConfirmPassword">Confirm Password</label>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3 h-25">
+                <select asp-for="Role" asp-items="@Model.Roles" class="form-select"><option selected disabled>--Select Role--</option></select>
+            </div>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -40,11 +40,6 @@ namespace DataAccess.Repository
 			var usernameUnique = _db.Users.FirstOrDefault(u => u.UserName == username) == null;
 			if (usernameUnique&&(role==SD.RoleCustomer||role==SD.RoleAdmin))
 			{
-				if(!await _roleManager.RoleExistsAsync(role))
-				{
-					_roleManager.CreateAsync(new IdentityRole(SD.RoleAdmin));
-					_roleManager.CreateAsync(new IdentityRole(SD.RoleCustomer));
-				}
 				var user = new ApplicationUser()
 				{
 					Name = name,
@@ -54,6 +49,14 @@ namespace DataAccess.Repository
 				};
 
 				await _userManager.CreateAsync(user, password);
+				if(await _roleManager.RoleExistsAsync(role))
+				{
+                    await _userManager.AddToRoleAsync(user, role);
+                }
+				else
+				{
+					await _userManager.AddToRoleAsync(user, SD.RoleCustomer);
+				}
 				return true;
 			}
 			return false;

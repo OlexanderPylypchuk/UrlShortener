@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace Models
 		[ValidateNever]
 		public string ShortUrl { get; set; }
 		public DateTime CreatedDate { get; set; }
-		[ForeignKey(nameof(CreatedBy))]
+		[ForeignKey("ApplicationUser")]
 		public string UserId { get; set; }
-		[ValidateNever]
-		public ApplicationUser CreatedBy { get; set; }
+		[ValidateNever, DisplayName("CreatedBy")]
+		public ApplicationUser ApplicationUser { get; set; }
 	}
 }

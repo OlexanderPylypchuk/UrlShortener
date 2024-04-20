@@ -39,6 +39,13 @@ namespace DataAccess.Repository
 			{
 				query=query.Where(filter);
 			}
+			if(includeProperties != null)
+			{
+				foreach(var property in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+				{
+                    query = query.Include(property);
+                }
+			}
 			return await query.ToListAsync();
 		}
 
@@ -49,7 +56,14 @@ namespace DataAccess.Repository
 			{
 				query = query.Where(filter);
 			}
-			return await query.FirstOrDefaultAsync();
+            if (includeProperties != null)
+            {
+                foreach (var property in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
+            return await query.FirstOrDefaultAsync();
 		}
 	}
 }

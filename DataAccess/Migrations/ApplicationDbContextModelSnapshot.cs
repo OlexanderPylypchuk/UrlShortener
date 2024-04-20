@@ -253,7 +253,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ShortenedUrls");
+                    b.ToTable("ShortenedUrls", (string)null);
                 });
 
             modelBuilder.Entity("Models.ApplicationUser", b =>
