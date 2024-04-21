@@ -1,0 +1,10 @@
+global using Microsoft.VisualStudio.TestTools.UnitTesting;
+global using DataAccess.Repository.IRepository;
+global using Models.ViewModels;
+global using Models;
+global using Moq;
+global using System.Linq.Expressions;
+global using UrlShortenerWebApp.Controllers;
+global using Microsoft.AspNetCore.Mvc;
+global using System.Security.Policy;
+global using System.Collections.Generic;
