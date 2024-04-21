@@ -55,7 +55,11 @@ namespace UrlShortenerWebApp.Controllers
 				Value = x.Name
 			}).ToList();
 			registerVM.Roles = roles;
-			TempData["error"] = "Something went wrong";
+			if(registerVM.ConfirmPassword != registerVM.Password)
+			{
+                TempData["error"] = "Password does not match";
+            }
+			else TempData["error"] = "Something went wrong";
 			return View(registerVM);
 		}
 		public IActionResult Login()
