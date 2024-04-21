@@ -7,7 +7,7 @@
 @if (accessor.HttpContext.User.Identity.IsAuthenticated)
 {
 	<div class="p-3">
-		<h2 class="text-center">Create new url</h2>
+		<h2 class="text-center text-primary">Create new url</h2>
 		<form method="post">
 			<div class="mb-3 row p-1">
 				<label asp-for="UrlRequest.Url" class="p-0"></label>
@@ -31,12 +31,6 @@
 				<th class="text-center">
 					Short Url
 				</th>
-				<th class="text-center">
-					Create Time
-				</th>
-				<th class="text-center">
-					Created by
-				</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -51,22 +45,21 @@
 						@obj.ShortUrl
 					</td>
 					<td>
-						@obj.CreatedDate
-					</td>
-					<td>
-						 @obj.ApplicationUser.Name
-					</td>
-					<td>
-						@if (accessor.HttpContext.User.Identity.IsAuthenticated && obj.UserId == accessor.HttpContext.User.Claims.Where(u => u.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value)
-						{
-							<div class="w-75 btn-group" role="group">
-
+						<div class="w-75 btn-group" role="group">
+							@if (accessor.HttpContext.User.Identity.IsAuthenticated)
+							{
+								<a asp-controller="Url" asp-route-code="@obj.Code" asp-action="Info" class="btn btn-danger mx-2">
+									<i class="bi bi-trash3"></i>Info
+								</a>
+							}
+							@if (accessor.HttpContext.User.Identity.IsAuthenticated && obj.UserId == accessor.HttpContext.User.Claims.Where(u => u.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value)
+							{
 								<a asp-controller="Url" asp-route-code="@obj.Code" asp-action="Delete" class="btn btn-danger mx-2">
 									<i class="bi bi-trash3"></i>Delete
 								</a>
+							}
 
-							</div>
-						}
+						</div>
 					</td>
 				</tr>
 			}

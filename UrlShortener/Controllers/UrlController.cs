@@ -12,9 +12,11 @@ namespace UrlShortenerWebApp.Controllers
 	public class UrlController : Controller
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public UrlController(IUnitOfWork unitOfWork)
+        private Random random;
+        public UrlController(IUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
+			random = new Random();
 		}
 		public async Task<IActionResult> Index()
 		{
@@ -58,7 +60,6 @@ namespace UrlShortenerWebApp.Controllers
 		
         private async Task<string> GenerateUrlCode()
 		{
-			Random random = new Random();
 			var urls=await _unitOfWork.ShortenedUrlRepository.GetAllAsync();
 			while (true)
 			{
@@ -87,5 +88,16 @@ namespace UrlShortenerWebApp.Controllers
             }
 			return RedirectToAction("Index");
 		}
+		[Route("info/{code}")]
+		public async Task<IActionResult> Info(string code)
+		{
+            var shorturl = await _unitOfWork.ShortenedUrlRepository.GetAsync(u => u.Code == code, includeProperties: "ApplicationUser");
+			if (shorturl != null)
+			{
+				return View(shorturl);
+			}
+            TempData["error"] = "Url is not found!";
+            return RedirectToAction("Index");
+        }
 	}
 }

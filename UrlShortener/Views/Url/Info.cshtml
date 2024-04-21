@@ -1,0 +1,26 @@
+﻿@model ShortenedUrl
+
+<h1 class="text-info p-3 text-center">Information about url</h1>
+<div class="row p-3">
+	<div class="col-8">
+		<p>
+			Original url: @Model.LongUrl
+		</p>
+		<p>
+			Shortened url: @Model.ShortUrl
+		</p>
+		<p>
+			Created by: @Model.ApplicationUser.Name
+		</p>
+		<p>
+			Created time: @Model.CreatedDate.ToString("dddd, dd MMMM yyyy HH:mm:ss")
+		</p>
+		<p>
+			Unique code: @Model.Code
+		</p>
+		<a asp-action="Index" class="btn btn-primary bg-success border-0 form-control">Return to list</a>
+	</div>
+	<div class="col-4">
+		<img src="https://placehold.co/500x750/png" class="rounded float-end" width="250" />
+	</div>
+</div>

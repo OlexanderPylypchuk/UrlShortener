@@ -34,6 +34,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGet("shorturl/{code}", async (string code,IUnitOfWork _unitOfWork) =>
