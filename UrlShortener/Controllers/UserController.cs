@@ -45,7 +45,8 @@ namespace UrlShortenerWebApp.Controllers
 				if (isSuccessful)
 				{
 					await _unitOfWork.UserRepository.Login(registerVM.UserName, registerVM.Password);
-                    return RedirectToAction("Index", "Home");
+					TempData["success"] = "Registered successfully";
+					return RedirectToAction("Index", "Home");
                 }
 			}
 			var roles = _roleManager.Roles.Select(x => new SelectListItem()
@@ -54,6 +55,7 @@ namespace UrlShortenerWebApp.Controllers
 				Value = x.Name
 			}).ToList();
 			registerVM.Roles = roles;
+			TempData["error"] = "Something went wrong";
 			return View(registerVM);
 		}
 		public IActionResult Login()
@@ -69,14 +71,17 @@ namespace UrlShortenerWebApp.Controllers
 				var isSuccessful=await _unitOfWork.UserRepository.Login(loginVM.UserName, loginVM.Password);
 				if(isSuccessful)
 				{
+					TempData["success"] = "Loged in successfully";
                     return RedirectToAction("Index", "Home");
                 }
 			}
+			TempData["error"] = "Something went wrong";
 			return View(loginVM);
 		}
 		public async Task<IActionResult> Logout()
 		{
 			await _unitOfWork.UserRepository.Logout();
+			TempData["success"] = "Loged out successfully";
 			return RedirectToAction("Index","Home");
 		}
 	}

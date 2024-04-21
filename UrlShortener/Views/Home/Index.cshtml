@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+<partial name="_Notification" />
 <div class="text-center p-4">
     <h1 class="display-4 text-primary">Welcome to Url Shortener Sevice!</h1>
 </div>
@@ -20,7 +20,7 @@
         <br />
         <p>
             If it is valid and working, service generates unique code that contains both upper and lower case letters of English aplhabet, as well as number 1-10.
-            Code only contains 7 characters for optimisation reasons.
+            Code only contains 7 characters for optimisation reasons. If its not, service will let you know!
         </p>
         <br />
         <p>

@@ -32,11 +32,13 @@ namespace UrlShortenerWebApp.Controllers
 			{
 				if(!Uri.TryCreate(shortUrlVM.UrlRequest.Url, UriKind.Absolute, out var _))
 				{
+					TempData["error"] = "Url is not valid!";
 					return RedirectToAction("Index");
 				}
 				if (await _unitOfWork.ShortenedUrlRepository.GetAsync(u => u.LongUrl == shortUrlVM.UrlRequest.Url) != null)
 				{
-					return RedirectToAction("Index");
+                    TempData["error"] = "Url was already shortened!";
+                    return RedirectToAction("Index");
                 }
 				var code = await GenerateUrlCode();
 				ShortenedUrl shortenedUrl = new()
@@ -45,11 +47,12 @@ namespace UrlShortenerWebApp.Controllers
 					UserId = HttpContext.User.Claims.Where(u => u.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value,
 					CreatedDate = DateTime.Now,
 					LongUrl = shortUrlVM.UrlRequest.Url,
-					ShortUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/url/{code}"
+					ShortUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/shorturl/{code}"
 				};
 				await _unitOfWork.ShortenedUrlRepository.AddAsync(shortenedUrl);
 				_unitOfWork.Save();
-			}
+                TempData["success"] = "Url was successfully shortened!";
+            }
 			return RedirectToAction("Index"); 
 		}
 		
@@ -80,7 +83,8 @@ namespace UrlShortenerWebApp.Controllers
 			{
 				_unitOfWork.ShortenedUrlRepository.Delete(shorturl);
 				_unitOfWork.Save();
-			}
+                TempData["success"] = "Url was successfully deleted!";
+            }
 			return RedirectToAction("Index");
 		}
 	}

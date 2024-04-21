@@ -36,10 +36,13 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapGet("url/{code}", async (string code,IUnitOfWork _unitOfWork) =>
+app.MapGet("shorturl/{code}", async (string code,IUnitOfWork _unitOfWork) =>
 {
 	var url = await _unitOfWork.ShortenedUrlRepository.GetAsync(u => u.Code == code);
-	return Results.Redirect(url.LongUrl);
+	if (url != null)
+		return Results.Redirect(url.LongUrl);
+	else
+		return null;
 });
 
 app.MapControllerRoute(
